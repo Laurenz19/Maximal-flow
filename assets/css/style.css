@@ -1,0 +1,106 @@
+body{
+    background-color: rgb(255, 255, 255);
+}
+
+nav.navbar{
+    background-color: #49026A;
+    padding: 18px;
+    color: white;
+}
+
+.navbar span{
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.container-content{
+    position: relative;
+    top:75px;
+}
+
+.graph-container{
+    background-color: #e8e2ff;
+    border-radius: 15px;
+}
+
+
+.autoHide{
+    opacity: 0;
+    margin-left: 1em;
+    transition: .6s all;
+}
+.capacite{
+    stroke: rgb(29, 28, 28);
+    fill: rgb(34, 32, 32);
+}
+.capacite:hover{
+    stroke: rgb(61, 8, 233);
+    fill: rgb(61, 8, 233);
+}
+
+.actions{
+    position: relative;
+    top:100px;
+    display: flex;
+    justify-content: center;
+}
+
+.actions .btn{
+    background-color: #49026A;
+    padding: 8px;
+    color: white;
+}
+
+.list-group li:hover{
+    color: white;
+    background-color: #49026A;
+}
+
+
+tr:hover > td > .autoHide{
+    margin-left: 0;
+    opacity: 1;
+}
+
+text{
+    font-size: 14pt;
+}
+
+.point:hover{
+    cursor: move;
+}
+
+.point circle{
+    transition: .4s all;
+    fill: white;
+    stroke: white;
+}
+
+.point text{
+    stroke: #49026A;
+    fill: #49026A;
+}
+.point:hover circle{
+    stroke: #49026A;
+    fill: #49026A;
+}
+.point:hover text{
+    fill: white;
+    stroke: white;
+}
+
+path{
+    fill: rgb(34, 32, 32);
+    stroke: rgb(29, 28, 28);
+}
+mark{
+    padding: .7em;
+    border-radius: 40px;
+}
+
+.abs{
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+}

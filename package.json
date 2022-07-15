@@ -1,0 +1,15 @@
+{
+  "name": "maximal-flow",
+  "version": "1.0.0",
+  "description": "Maximal flow project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Laurenzio Sambany",
+  "license": "ISC",
+  "dependencies": {
+    "@iconscout/unicons": "^4.0.1",
+    "bootstrap": "^5.1.3"
+  }
+}

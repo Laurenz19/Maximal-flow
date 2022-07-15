@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html ng-app="max-flow">
+    <head>
+        <meta charset="UTF-8">
+        <title>Max Flow</title>
+
+        <!--CSS-->
+        <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="node_modules/@iconscout/unicons/css/line.css">
+        <link rel="stylesheet" href="node_modules/@iconscout/unicons/css/solid.css">
+        <link rel="stylesheet" href="node_modules/@iconscout/unicons/css/thinline.css">
+        <link rel="stylesheet" href="./assets/css/style.css">
+
+        <!--Javascript-->
+        <script src="./assets/js/jquery.min.js"></script>
+        <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="./assets/js/d3.min.js"></script>
+        <script src="./assets/js/angular.min.js"></script>
+        <script src="app.js" charset="utf-8"></script>  
+    </head>
+    <body>
+    <nav class="navbar">
+        <div class="container-fluid">
+            <span>
+                Maximal Flow <i class="uil uil-channel"></i>
+            </span>
+        </div>
+    </nav>
+
+    <div class="container" ng-controller="pointsAdd">
+        <div class="row container-content">
+            <div class="col-sm-12 graph-container">
+                <div id="graphe">
+    
+                </div>
+            </div>
+          </div>
+         
+          <div class="modal fade" id="modalcreationpoint" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New node</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="row">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="floatingInput" ng-model="point.nom" placeholder="A">
+                            <label for="floatingInput">Node's Label</label>
+                          </div>
+                        <div class="col-xs-6" align="center">
+                            <label>
+                                X : {{ point.x }} px
+                            </label>
+                        </div>
+                        <div class="col-xs-6" align="center">
+                            <label>
+                                Y : {{ point.y }} px
+                            </label>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="uil uil-times"></i> Cancel</button>
+                    <button type="button" class="btn btn-primary" ng-disabled="!point.nom" ng-click="creerPoint(point)"><i class="uil uil-check"></i> Save</button>
+                  </div>
+                </div>
+              </div>    
+        </div>
+        <div class="modal fade" id="modalCalculFlotMax" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Maximal Flow</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="grid">
+                        <div class="row">
+                            <div class="col-sm-offset-2 col-sm-6">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <label>Source :</label>
+                                        <select  class="form-control" ng-model="source" ng-options="noeud.nom for noeud in donneesGraphe.nodes"></select>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <label>Destination :</label>
+                                        <select  class="form-control" ng-model="target" ng-options="noeud.nom for noeud in donneesGraphe.nodes"></select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <input type="button" class="btn btn-primary" ng-disabled="(source == null || target == null) || (source == target)" style="width: 100%;margin-top: 10px;" class="btn btn-default" value="Calculate" ng-click="calculerFlotMax()">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 text-center" >
+                                <h4>Max Flow</h4>
+                                <h1>{{ flotMax }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <div class="modal fade" id="modalCalculFlotMax" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+                        <h4 class="modal-title">Flot Maximal</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="grid">
+                            <div class="row">
+                                <div class="col-sm-offset-2 col-sm-6">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <label>Source :</label>
+                                            <select  class="form-control" ng-model="source" ng-options="noeud.nom for noeud in donneesGraphe.nodes"></select>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <label>Destination :</label>
+                                            <select  class="form-control" ng-model="target" ng-options="noeud.nom for noeud in donneesGraphe.nodes"></select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <input type="button" ng-disabled="(source == null || target == null) || (source == target)" style="width: 100%;margin-top: 10px;" class="btn btn-default" value="Calculer" ng-click="calculerFlotMax()">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 text-center" >
+                                    <h4>FlotMax</h4>
+                                    <h1>{{ flotMax }}</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" ng-hide="!enModeCreation" ng-disabled="!point.nom" ng-click="creerPoint(point)">Créer</button>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+        
+        <div class="modal fade" id="modalLien">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">New edge</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="grid">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col" align="center">
+                                        <h1>{{ lien.source }}</h1>
+                                    </div>
+                                    <div class="col" align="center">
+                                        <h3> <i class="uil uil-arrow-right"></i> </h3>
+                                    </div>
+                                    <div class="col" align="center">
+                                        <h1>{{ lien.target }}</h1>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12" align="center">
+                                        <label>Capacity:
+                                            <input style="width: 100%!important;"  type="text" ng-model="lien.capacite" class="form-control" placeholder="Capacité" />
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> <i class="uil uil-times"></i> Close</button>
+                  <button type="button" class="btn btn-primary" ng-click="creerLien(lien)"><i class="uil uil-check"></i> Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <div class="actions">
+            <button class="btn" type="submit" ng-click="afficherCalculFlotMax()"> <i class="uil uil-calculator-alt"></i> Calculation</button>
+        </div>
+    
+        <ul class="abs graphemenucontextuel list-group">
+            <li class="list-group-item" ng-click="showModalCreationPoint()">Add Node</li>
+        </ul>
+    
+        <ul class="abs pointmenucontextuel list-group">
+            <li class="list-group-item" ng-click="lienApartir()">Add edge from this node</li>
+            <li class="list-group-item" ng-click="lienVers()">To this one</li>
+            <li class="list-group-item" ng-click="supprPoint()">Delete node</li>
+        </ul>
+    </div>
+    <script src="./assets/js/graphe.js" charset="utf-8"></script>
+    <script src="./assets/js/flotmax.js"></script>
+    </body>
+</html>
